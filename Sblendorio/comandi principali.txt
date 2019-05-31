@@ -1,0 +1,207 @@
+INSERT INTO 
+
+ String nome = request.getParameter("nome");
+            String cognome = request.getParameter("cognome");
+            String luogo = request.getParameter("luogo");
+            // selezione dell'ultimo ID
+            Statement stmt4 = connection.createStatement();
+            String sqlId = "Select Max(ID) as MaxId from Giudice";
+            ResultSet rs4 = stmt4.executeQuery(sqlId);
+            rs4.next();
+            // calcolo nuovo ID
+            int newId = rs4.getInt("MaxId") + 1;
+            // inserimento del nuovo giudice
+            String sql4 = "INSERT INTO Giudice (ID, Nome, Cognome, LuogoDiNascita) VALUES (?, ?, ?, ?)";
+            PreparedStatement prepStmt = connection.prepareStatement(sql4);
+            prepStmt.setInt(1, newId);
+            prepStmt.setString(2, nome);
+            prepStmt.setString(3, cognome);
+            prepStmt.setString(4, luogo);
+            prepStmt.executeUpdate();
+            message = "Giudice inserito<br>";  
+_______________________________________________________________________________________________________________________________________________     
+         
+SELECT
+
+String sql = "SELECT * FROM Giudice order by Cognome";
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			out.print("<table>");
+			
+			out.print("<tr><th align=left>Cognome</th><th align=left>Nome</th></tr>");
+			
+    		while(rs.next()){
+
+				String Nome = rs.getString("Nome");
+				String Cognome = rs.getString("Cognome");
+                
+                out.print("<tr><td>" + Cognome + "</td><td>" + Nome + "</td></tr>");
+
+	        }
+	        
+	        out.print("</table>");
+	        
+	        rs.close();
+	        
+	        connection.close();
+_______________________________________________________________________________________________________________________________________________
+
+UPDATE (Con Data)	   
+
+ String nome = request.getParameter("nome");
+            String cognome = request.getParameter("cognome");
+            String AnnoDiNascita = request.getParameter("AnnoDiNascita");
+            String sql = "UPDATE Giudice SET AnnoDiNascita = ? WHERE Nome = ? AND Cognome = ?";
+            PreparedStatement prepStmt = connection.prepareStatement(sql);
+            prepStmt.setDate(1, java.sql.Date.valueOf(AnnoDiNascita)); 
+            prepStmt.setString(2, nome);
+            prepStmt.setString(3, cognome);
+            prepStmt.executeUpdate();     
+_______________________________________________________________________________________________________________________________________________
+            
+LOGIN
+
+String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String sql = "SELECT * FROM Utente WHERE Username = ? AND Pw = ?";
+            PreparedStatement prepStmt = connection.prepareStatement(sql);
+            prepStmt.setString(1, username);
+            prepStmt.setString(2, password);
+            ResultSet rs = prepStmt.executeQuery();
+            if (rs.next())
+            {
+                out.println("Benvenuto "+ rs.getString("Nome"));
+            }
+            else
+            }
+                out.println("Ma chi sei?!?");
+            }
+            rs.close();
+            connection.close();
+_______________________________________________________________________________________________________________________________________________
+            
+REGISTRATI
+
+String nome = request.getParameter("nome");
+            String cognome = request.getParameter("cognome");
+            String username = request.getParameter("username");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            Statement stmt = connection.createStatement();
+            String sql = "SELECT Max(ID) as MaxID FROM Utente";
+            ResultSet rs = stmt.executeQuery(sql);
+            rs.next();
+            int newID = rs.getInt("MaxID") + 1;
+            String sql2 = "INSERT INTO Utente (ID, Nome, Cognome, Username, Email, Pw) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement prepStmt2 = connection.prepareStatement(sql2);
+            prepStmt2.setInt(1, newID);
+            prepStmt2.setString(2, nome); 
+            prepStmt2.setString(3, cognome);
+            prepStmt2.setString(4, username);
+            prepStmt2.setString(5, email);
+            prepStmt2.setString(6, password);
+            prepStmt2.executeUpdate();
+_______________________________________________________________________________________________________________________________________________
+
+COMANDO PER PORTARE AD UN'ALTRA PAGINA
+
+response.sendRedirect("/html/home.html");
+_______________________________________________________________________________________________________________________________________________
+
+TABELLA
+
+out.print("<table>");
+			
+			out.print("<tr><th align=left>Cognome</th><th align=left>Nome</th></tr>");
+			
+    		while(rs.next()){
+
+				String Nome = rs.getString("Nome");
+				String Cognome = rs.getString("Cognome");
+                
+                out.print("<tr><td>" + Cognome + "</td><td>" + Nome + "</td></tr>");
+
+	        }
+	        
+	        out.print("</table>");
+_______________________________________________________________________________________________________________________________________________	        
+	        
+ACCESSO AL DATABASE
+
+String connectionUrl = "jdbc:sqlserver://213.140.22.237\\SQLEXPRESS:1433;databaseName=XFactor;user=cognome.nome;password=xxx123#";
+
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Connection connection = DriverManager.getConnection(connectionUrl);	     
+_______________________________________________________________________________________________________________________________________________            
+            
+MEDIA
+
+double media = 0;
+        
+            String sql1 = "SELECT AVG(DATEDIFF(year, DataDiNascita , GETDATE())) AS Media FROM Cantante";
+            PreparedStatement prepStmt = connection.prepareStatement(sql1);
+            ResultSet rs = prepStmt.executeQuery();
+            rs.next()
+            media = rs.getInt("Media");
+            rs.close();
+            out.println("I cantanti presenti nel database hanno un' età media di "+media+" anni.");
+            connection.close();            
+_______________________________________________________________________________________________________________________________________________
+
+VARIABILE NULL
+
+String nome = request.getParameter("nome");
+			String cognome = request.getParameter("cognome");
+			String sql = "SELECT * FROM Cantante WHERE Nome = ? AND Cognome = ?";
+			
+			PreparedStatement stmt = connection.prepareStatement(sql);		
+    		stmt.setString(1, nome);
+    		stmt.setString(2, cognome);
+			ResultSet rs = stmt.executeQuery();
+
+			out.println("<div class=\"container-fluid\">");            
+			out.print("<table>");			
+			out.print("<tr><th align=left>Cognome</th><th align=left>Nome</th><th align=left>Data di nascita</th><th align=left>Luogo di nascita</th></tr>");
+			
+    		while(rs.next()){
+
+				String Nome = rs.getString("Nome");
+				String Cognome = rs.getString("Cognome");
+				String data = rs.getString("DataDiNascita");
+				String luogo = rs.getString("LuogoDiNascita");
+				if (data.equals(null) || data.isEsmpty()){
+				    data = "";
+				}
+				if (luogo.equals(null) || luogo.isEmpty()){
+				    luogo = "";
+				}
+                out.println("<tr><td>" + Cognome + "</td><td>" + Nome + "</td><td>" + data + "</td><td>" + luogo + "</td></tr>");
+
+	        }
+	        
+	        out.print("</table>");
+_______________________________________________________________________________________________________________________________________________
+
+DELETE
+
+String cognome = request.getParameter("cognome");
+            String sql4a = "SELECT COUNT(ID) AS Numero FROM Giudice WHERE Cognome = ?";
+            PreparedStatement prepStmta = connection.prepareStatement(sql4a);
+            prepStmta.setString(1, cognome);
+            ResultSet rsa = prepStmta.executeQuery();
+            int numero = 0;
+            (rsa.next()) 
+            numero = rsa.getInt("Numero");
+            rsa.close();
+            if (numero == 0) {
+                message = "Ci sono stati dei problemi, riprova e controlla di aver scritto tutto <b>correttamente</b>.";
+            } else {
+                String sql4 = "DELETE FROM Giudice WHERE cognome = ?";
+                PreparedStatement prepStmt = connection.prepareStatement(sql4);
+                prepStmt.setString(1, cognome);
+                prepStmt.executeUpdate();
+                message = "Giudice Eliminato";
+
+
+            }	        
